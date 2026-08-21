@@ -81,7 +81,15 @@ def scroll_and_select_user(page, username, targets):
 
     logger.debug(f"账号 {username} 点击进入好友标签页")
     # 点击好友标签页
+    try:
     page.wait_for_selector(friends_tab_selector)
+except Exception:
+    import os
+    os.makedirs("logs", exist_ok=True)
+    page.screenshot(path="logs/page-failure.png", full_page=True)
+    with open("logs/page-failure.html", "w", encoding="utf-8") as file:
+        file.write(page.content())
+    raise
     page.locator(friends_tab_selector).click()
 
     logger.debug(f"账号 {username} 进入好友列表页面")
